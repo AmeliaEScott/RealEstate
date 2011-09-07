@@ -1,0 +1,10 @@
+name: RealEstate
+main: me.killgoblen.RealEstate.RealEstate
+version: 0.1
+depend:
+    [WorldGuard]
+    
+commands:
+    RealEstate:
+        Description: Base admin command.
+        Usgage: Tbd

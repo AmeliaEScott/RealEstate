@@ -40,7 +40,6 @@ public class RealEstate extends JavaPlugin{
 		}
 		manager = new NPCManager(this);
 		for (String id : data.getIds()){
-			System.out.print(id);
 			manager.spawnNPC(data.getName(id), data.getLocation(id), id);
 		}
 	}

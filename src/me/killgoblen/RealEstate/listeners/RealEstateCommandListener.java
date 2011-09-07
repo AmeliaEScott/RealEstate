@@ -26,25 +26,36 @@ public class RealEstateCommandListener implements CommandExecutor{
 			plugin.getData().newCity(args[1]);
 			return true;
 		}else if(args.length == 5 && args[0].equalsIgnoreCase("addLot")){
-			int init;
-			int rent;
-			try{
-				init = Integer.parseInt(args[3]);
-				rent = Integer.parseInt(args[4]);
-			}catch (NumberFormatException e){
-				player.sendMessage("Invalid number somewhere. Figure it out on your own.");
-				return false;
+			int init = getIntFromString(args[3]);
+			int rent = getIntFromString(args[4]);
+			if(init == -1 || rent == -2){
+				player.sendMessage("Invalid number.");
+				return true;
 			}
-			if(init < 0 || rent < 0){
+			if(init == -2 || rent == -2){
 				player.sendMessage("No negatives!");
-				return false;
+				return true;
 			}
+			
 				
 			if(!(plugin.getData().addLot(args[1], args[2], init, rent)))
 				player.sendMessage("Yo make a citeh first man");
 			player.sendMessage("Lot added! " + init + " " + rent);
 		}
 		return false;
+	}
+	
+	private int getIntFromString(String number){
+		int i;
+		try{
+			i = Integer.parseInt(number);
+		}catch (NumberFormatException e){
+			return -1;
+		}
+		
+		if (i < 0)
+			return -2;
+		return i;
 	}
 
 }

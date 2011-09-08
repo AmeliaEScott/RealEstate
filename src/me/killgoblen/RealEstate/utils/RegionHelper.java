@@ -12,15 +12,21 @@ import org.bukkit.plugin.Plugin;
 public class RegionHelper {
 	
 	RealEstate plugin;
+	WorldGuardPlugin worldGuard;
 	
 	public RegionHelper(RealEstate plugin){
 		this.plugin = plugin;
+		if(getWorldGuard() != null){
+			worldGuard = getWorldGuard();
+		}
 	}
 	
 	public WorldGuardPlugin getWorldGuard(){
 		Plugin wg = plugin.getServer().getPluginManager().getPlugin("WorldGuard");
-		if (wg == null || !(wg instanceof WorldGuardPlugin))
+		if (wg == null || !(wg instanceof WorldGuardPlugin)){
+			System.out.print("SOMETHING WENT WRONG!!! PANIC TIME!!!");
 			return null;
+		}
 		return (WorldGuardPlugin) wg;
 	}
 	

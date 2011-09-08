@@ -16,7 +16,7 @@ import org.bukkit.Location;
 public class DataTable {
 	
 	Logger log = Bukkit.getServer().getLogger();
-	HashMap<String, HashMap<String, String>> map;
+	HashMap<String, HashMap<String, HashMap<String, String>>> map;
 	
 	@SuppressWarnings("unchecked")
 	public DataTable(File file){
@@ -26,7 +26,7 @@ public class DataTable {
 			Object obj = in.readObject();
 			if (obj instanceof HashMap<?, ?>){
 				try{
-					map = (HashMap<String, HashMap<String, String>>) obj;
+					map = (HashMap<String, HashMap<String, HashMap<String, String>>>) obj;
 				}catch (ClassCastException e){
 					log.severe("Data file " + file.getPath() + " is messed up!");
 				}
@@ -42,7 +42,27 @@ public class DataTable {
 			e.printStackTrace();
 		}
 		if (map == null)
-			map = new HashMap<String, HashMap<String, String>>();
+			map = new HashMap<String, HashMap<String, HashMap<String, String>>>();
+		if(!map.containsKey("NPC"))
+			map.put("NPC", new HashMap<String, HashMap<String, String>>());
+		if(!map.containsKey("CITY"))
+			map.put("CITY", new HashMap<String, HashMap<String, String>>());
+		if(!map.containsKey("LOT"))
+			map.put("LOT", new HashMap<String, HashMap<String, String>>());
+	}
+	
+	public boolean hasId(String id){
+		return map.get("NPC").containsKey(id);
+	}
+	
+	public boolean hasCity(String city){
+		return map.get("CITY").containsKey(city);
+	}
+	
+	public void removeNpc(String id){
+		if(hasId(id)){
+			map.get("NPC").remove(id);
+		}
 	}
 	
 	public DataTable(String file){
@@ -54,30 +74,32 @@ public class DataTable {
 				e.printStackTrace();
 			}
 		}
-		map = new HashMap<String, HashMap<String, String>>();
+		map = new HashMap<String, HashMap<String, HashMap<String, String>>>();
+		if(!map.containsKey("NPC"))
+			map.put("NPC", new HashMap<String, HashMap<String, String>>());
+		if(!map.containsKey("CITY"))
+			map.put("CITY", new HashMap<String, HashMap<String, String>>());
+		if(!map.containsKey("LOT"))
+			map.put("LOT", new HashMap<String, HashMap<String, String>>());
 	}
 	
 	public String[] getIds(){
-		String[] array = new String[map.size()];
-		array = map.keySet().toArray(array);
-		for (int i = 0; i < array.length; i++){
-			String s = array[i].split(":", 2)[1];
-			array[i] = s;
-		}
+		String[] array = new String[map.get("NPC").size()];
+		array = map.get("NPC").keySet().toArray(array);
 		return array;
 		
 	}
 	
 	public Location getLocation(String id){
-		id = "NPC:" + id;
-		Location loc = new Location((Bukkit.getServer().getWorld(map.get(id).get("world"))), 
-				Double.parseDouble(map.get(id).get("x")), Double.parseDouble(map.get(id).get("y")), Double.parseDouble(map.get(id).get("z")), 
-				Float.parseFloat(map.get(id).get("yaw")), Float.parseFloat(map.get(id).get("pitch")));
+		HashMap<String, HashMap<String, String>> map2 = map.get("NPC");
+		Location loc = new Location((Bukkit.getServer().getWorld(map2.get(id).get("world"))), 
+				Double.parseDouble(map2.get(id).get("x")), Double.parseDouble(map2.get(id).get("y")), Double.parseDouble(map2.get(id).get("z")), 
+				Float.parseFloat(map2.get(id).get("yaw")), Float.parseFloat(map2.get(id).get("pitch")));
 		return loc;
 	}
 	
 	public void setLocation(String id, Location loc){
-		HashMap<String, String> map2 = map.get("NPC:" + id);
+		HashMap<String, String> map2 = map.get("NPC").get(id);
 		map2.put("world", loc.getWorld().getName());
 		map2.put("x", Double.toString(loc.getX()));
 		map2.put("y", Double.toString(loc.getY()));
@@ -87,24 +109,24 @@ public class DataTable {
 	}
 	
 	public String getCity(String id){
-		return map.get("NPC:" + id).get("city");
+		return map.get("NPC").get(id).get("city");
 	}
 	
 	public void setCity(String id, String city){
-		map.get("NPC:" + id).put("city", city);
+		map.get("NPC").get(id).put("city", city);
 	}
 	
 	public String getName(String id){
-		return map.get("NPC:" + id).get("name");
+		return map.get("NPC").get(id).get("name");
 	}
 	
 	public void setName(String id, String name){
-		map.get("NPC:" + id).put("name", name);
+		map.get("NPC").get(id).put("name", name);
 	}
 	
 	public void newNpc(String id, String name, Location loc, String city){
 		//id = "NPC:" + id;
-		map.put("NPC:" + id, new HashMap<String, String>());
+		map.get("NPC").put(id, new HashMap<String, String>());
 		setLocation(id, loc);
 		setCity(id, city);
 		setName(id, name);
@@ -126,16 +148,19 @@ public class DataTable {
 	}
 	
 	public void newCity(String city){
-		map.put("City:" + city, new HashMap<String, String>());
+		map.get("CITY").put(city, new HashMap<String, String>());
 	}
 	
 	public boolean addLot(String city, String lot, int initprice, int rent){
-		if (!map.containsKey("City:" + city) || map.get("City:" + city) == null)
-			return false;String initpriceS = Integer.toString(initprice);
-		String rentS = Integer.toString(rent);
-		String price = initpriceS + ":" + rentS;
-		String cityS = "City:" + city;
-		map.get(cityS).put(lot, price);
+		if(!map.get("CITY").containsKey(city))
+			return false;
+		map.get("CITY").get(city).put(lot, lot);
+		map.get("LOT").put(lot, new HashMap<String, String>());
+		map.get("LOT").get(lot).put("originalInit", Integer.toString(initprice));
+		map.get("LOT").get(lot).put("originalRent", Integer.toString(rent));
+		map.get("LOT").get(lot).put("init", Integer.toString(initprice));
+		map.get("LOT").get(lot).put("rent", Integer.toString(rent));
+		map.get("LOT").get(lot).put("city", city);
 		return true;
 	}
 	
@@ -150,15 +175,17 @@ public class DataTable {
 	}*/
 	
 	public int getInitPrice(String city, String lot){
-		String init = map.get("City:" + city).get(lot).split(":")[0];
-		int price = Integer.parseInt(init);
-		return price;
+		if(!map.get("LOT").containsKey(lot))
+			return -1;
+		String init = map.get("LOT").get(lot).get("init");
+		return Integer.parseInt(init);
 	}
 	
 	public int getRent(String city, String lot){
-		String rent = map.get("City:" + city).get(lot).split(":")[1];
-		int price = Integer.parseInt(rent);
-		return price;
+		if(!map.get("LOT").containsKey(lot))
+			return -1;
+		String s = map.get("LOT").get(lot).get("rent");
+		return Integer.parseInt(s);
 	}
 
 }

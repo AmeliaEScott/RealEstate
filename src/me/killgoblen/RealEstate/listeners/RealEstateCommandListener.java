@@ -1,7 +1,6 @@
 package me.killgoblen.RealEstate.listeners;
 
 import me.killgoblen.RealEstate.RealEstate;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -41,6 +40,18 @@ public class RealEstateCommandListener implements CommandExecutor{
 			if(!(plugin.getData().addLot(args[1], args[2], init, rent)))
 				player.sendMessage("Yo make a citeh first man");
 			player.sendMessage("Lot added! " + init + " " + rent);
+		}else if (args.length == 2 && args[0].equalsIgnoreCase("removeAgent")){
+			if (plugin.getData().hasId(args[1])){
+				plugin.getData().removeNpc(args[1]);
+				return true;
+			}else{
+				sender.sendMessage("No npc with that name found!");
+				return true;
+			}
+		}else if(args.length == 3 && args[0].equalsIgnoreCase("setMember")){
+			String[] array = new String[1];
+			array[0] = args[2];
+			plugin.getRegionHelper().setMembers(args[1], player.getWorld(), array);
 		}
 		return false;
 	}

@@ -22,9 +22,7 @@ public class RealEstateEntityListener extends EntityListener{
 			if(nevent.getNpcReason() == NpcTargetReason.NPC_RIGHTCLICKED){
 				Player player = (Player)nevent.getTarget();
 				String id = plugin.getManager().getNPCIdFromEntity(nevent.getEntity());
-				player.sendMessage(id);
-				String city = plugin.getData().getCity(id);
-				player.sendMessage(city);
+				
 			}
 		}
 	}

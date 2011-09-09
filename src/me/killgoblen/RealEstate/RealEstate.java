@@ -6,6 +6,7 @@ import me.killgoblen.RealEstate.listeners.RealEstateCommandListener;
 import me.killgoblen.RealEstate.listeners.RealEstateEntityListener;
 import me.killgoblen.RealEstate.listeners.RealEstatePlayerListener;
 import me.killgoblen.RealEstate.utils.DataTable;
+import me.killgoblen.RealEstate.utils.NpcChatManager;
 import me.killgoblen.RealEstate.utils.RegionHelper;
 
 import org.bukkit.event.Event;
@@ -18,6 +19,7 @@ public class RealEstate extends JavaPlugin{
 	public DataTable data;
 	public NPCManager manager;
 	public RegionHelper helper;
+	public NpcChatManager chat;
 	
 	public void onEnable(){
 		PluginManager pm = getServer().getPluginManager();
@@ -61,6 +63,10 @@ public class RealEstate extends JavaPlugin{
 	
 	public RegionHelper getRegionHelper(){
 		return helper;
+	}
+	
+	public NpcChatManager getChat(){
+		return chat;
 	}
 
 

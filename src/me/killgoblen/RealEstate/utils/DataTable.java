@@ -164,6 +164,13 @@ public class DataTable {
 		return true;
 	}
 	
+	public boolean isInCity(String lot, String city){
+		if(!map.get("LOT").containsKey(lot))
+			return false;
+		String c = map.get("LOT").get(lot).get("city");
+		return c.equals(city);
+	}
+	
 	/*public boolean addLot(String city, String lot, String initprice, String rent){
 		
 		String initpriceS = initprice;

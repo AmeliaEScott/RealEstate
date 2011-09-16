@@ -27,7 +27,7 @@ public class RealEstateCommandListener implements CommandExecutor{
 		}else if(args.length == 5 && args[0].equalsIgnoreCase("addLot")){
 			int init = getIntFromString(args[3]);
 			int rent = getIntFromString(args[4]);
-			if(init == -1 || rent == -2){
+			if(init == -1 || rent == -1){
 				player.sendMessage("Invalid number.");
 				return true;
 			}

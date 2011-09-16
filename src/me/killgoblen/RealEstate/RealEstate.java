@@ -28,7 +28,7 @@ public class RealEstate extends JavaPlugin{
 		RealEstateEntityListener ent = new RealEstateEntityListener(this);
 		helper = new RegionHelper(this);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pl, Event.Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, pl, Event.Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_CHAT, pl, Event.Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_MOVE, pl, Event.Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_TARGET, ent, Event.Priority.Normal, this);
 		getCommand("RealEstate").setExecutor(cmd);
@@ -44,6 +44,7 @@ public class RealEstate extends JavaPlugin{
 			e.printStackTrace();
 		}
 		manager = new NPCManager(this);
+		chat = new NpcChatManager(this);
 		for (String id : data.getIds()){
 			manager.spawnNPC(data.getName(id), data.getLocation(id), id);
 		}

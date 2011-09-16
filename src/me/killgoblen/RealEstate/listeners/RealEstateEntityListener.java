@@ -19,11 +19,13 @@ public class RealEstateEntityListener extends EntityListener{
 	public void onEntityTarget(EntityTargetEvent event){
 		if(event instanceof NpcEntityTargetEvent){
 			NpcEntityTargetEvent nevent = (NpcEntityTargetEvent) event;
+			
 			if(nevent.getNpcReason() == NpcTargetReason.NPC_RIGHTCLICKED){
 				Player player = (Player)nevent.getTarget();
 				String id = plugin.getManager().getNPCIdFromEntity(nevent.getEntity());
-				if(!plugin.getChat().isTalkingTo(player, id)){
-					plugin.getChat().handleChat(player, "null", id);
+				if(!plugin.getChat().isTalking(player)){
+					player.sendMessage(plugin.getData().getCity(id));
+					plugin.getChat().handleChat(player, id, "nullish");
 				}
 				
 			}

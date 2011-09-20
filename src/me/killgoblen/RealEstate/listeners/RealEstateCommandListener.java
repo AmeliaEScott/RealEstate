@@ -37,7 +37,7 @@ public class RealEstateCommandListener implements CommandExecutor{
 			}
 			
 				
-			if(!(plugin.getData().addLot(args[1], args[2], init, rent)))
+			if(!(plugin.getData().addLot(args[1], args[2], init, rent, player.getLocation().getWorld().getName())))
 				player.sendMessage("Yo make a citeh first man");
 			player.sendMessage("Lot added! " + init + " " + rent);
 		}else if (args.length == 2 && args[0].equalsIgnoreCase("removeAgent")){

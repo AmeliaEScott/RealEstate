@@ -42,5 +42,21 @@ public class RegionHelper {
 		return true;
 	}
 	
+	public boolean setOwner(String lot, String player){
+		String[] array = new String[1];
+		array[0] = player;
+		if(plugin.getData().lotExists(lot)){
+			if(setMembers(lot, plugin.getServer().getWorld(plugin.getData().getWorld(lot)), array)){
+				return plugin.getData().setOwner(lot, player);
+			}
+		}
+		return false;
+	}
+	
+	public boolean regionExists(String lot, World world){
+		ProtectedRegion region = getWorldGuard().getGlobalRegionManager().get(world).getRegion(lot);
+		return !(region == null);
+	}
+	
 	
 }

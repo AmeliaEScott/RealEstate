@@ -151,16 +151,18 @@ public class DataTable {
 		map.get("CITY").put(city, new HashMap<String, String>());
 	}
 	
-	public boolean addLot(String city, String lot, int initprice, int rent){
+	public boolean addLot(String city, String lot, int initprice, int rent, String world){
 		if(!map.get("CITY").containsKey(city))
 			return false;
-		map.get("CITY").get(city).put(lot, lot);
+		map.get("CITY").get(city).put(lot, "");
 		map.get("LOT").put(lot, new HashMap<String, String>());
 		map.get("LOT").get(lot).put("originalInit", Integer.toString(initprice));
 		map.get("LOT").get(lot).put("originalRent", Integer.toString(rent));
 		map.get("LOT").get(lot).put("init", Integer.toString(initprice));
 		map.get("LOT").get(lot).put("rent", Integer.toString(rent));
 		map.get("LOT").get(lot).put("city", city);
+		map.get("LOT").get(lot).put("owner", "");
+		map.get("LOT").get(lot).put("world", world);
 		return true;
 	}
 	
@@ -193,6 +195,39 @@ public class DataTable {
 			return -1;
 		String s = map.get("LOT").get(lot).get("rent");
 		return Integer.parseInt(s);
+	}
+	
+	public boolean isAvailable(String lot){
+		return true;
+	}
+	
+	public boolean setOwner(String lot, String player){
+		if (!map.get("LOT").containsKey(lot)){
+			return false;
+		}else{
+			map.get("LOT").get(lot).put("owner", player);
+			return true;
+		}
+	}
+	
+	public String getOwner(String lot){
+		if(!map.get("LOT").containsKey(lot)){
+			return "";
+		}else{
+			return map.get("LOT").get(lot).get("owner");
+		}
+	}
+	
+	public boolean lotExists(String lot){
+		return map.get("LOT").containsKey(lot);
+	}
+	
+	public String getWorld(String lot){
+		if (!lotExists(lot)){
+			return "";
+		}else{
+			return map.get("LOT").get(lot).get("world");
+		}
 	}
 
 }
